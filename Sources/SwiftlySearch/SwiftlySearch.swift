@@ -115,9 +115,8 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         // MARK: - UISearchResultsUpdating
         func updateSearchResults(for searchController: UISearchController) {
             guard let text = searchController.searchBar.text else { return }
-            DispatchQueue.main.async {
-                self.text = text
-            }
+            self.text = text
+            
         }
 
 
