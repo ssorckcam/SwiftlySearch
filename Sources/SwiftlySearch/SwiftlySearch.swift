@@ -73,7 +73,7 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         return Coordinator(text: $text, placeholder: placeholder, editingSearch: $editingSearch, hidesNavigationBarDuringPresentation: hidesNavigationBarDuringPresentation, resultContent: resultContent, cancelClicked: cancelClicked, searchClicked: searchClicked)
     }
 
-    class Coordinator: NSObject, UISearchResultsUpdating, UISearchBarDelegate {
+    class Coordinator: NSObject, UISearchBarDelegate {
         @Binding
         var text: String
         @Binding
@@ -96,7 +96,6 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
 
             super.init()
 
-            searchController.searchResultsUpdater = self
             searchController.hidesNavigationBarDuringPresentation = hidesNavigationBarDuringPresentation
             searchController.obscuresBackgroundDuringPresentation = false
 
@@ -112,14 +111,6 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
             self.searchClicked = searchClicked
         }
 
-        // MARK: - UISearchResultsUpdating
-        func updateSearchResults(for searchController: UISearchController) {
-            guard let text = searchController.searchBar.text else { return }
-            self.text = text
-            
-        }
-
-
         // MARK: - UISearchBarDelegate
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
             self.cancelClicked()
@@ -134,6 +125,10 @@ struct SearchBar<ResultContent: View>: UIViewControllerRepresentable {
         
         func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
             self.editingSearch = false
+        }
+        
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            self.text = searchText
         }
     }
 
